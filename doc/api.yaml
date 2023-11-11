@@ -10,6 +10,7 @@ servers:
 tags:
  - name: "login"
  - name: "user"
+ - name: "photo"
 
 security:
   - bearerAuth: []
@@ -55,8 +56,6 @@ paths:
                 type: object
                 properties:
                   identifier:
-                    # change here if you decide to use an integer
-                    # or any other type of identifier
                     type: string
                     example: "abcdef012345"
 
@@ -71,7 +70,6 @@ paths:
           description: User username updated successfully
         '400':
           description: Bad request
-      # Add necessary parameters and request/response details
 
   /v1/upload_photo:
     post:
@@ -79,12 +77,36 @@ paths:
       operationId: uploadPhoto
       tags:
         - "photo"
+      requestBody:
+        description: Photo details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                photoId:
+                  type: string
+                  example: "photo123"
+                userId:
+                  type: string
+                  example: "abcdef012345"
+        required: true
       responses:
         '201':
           description: Photo uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  photoId:
+                    type: string
+                    example: "photo123"
+                  likesCount:
+                    type: integer
+                    example: 0
         '400':
-          description: Bad request
-      # Add necessary parameters and request/response details
+           description: Bad request
 
   /v1/follow_user:
     post:
@@ -147,6 +169,39 @@ paths:
       responses:
         '200':
           description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                    example: "abcdef012345"
+                  likedPhotos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        photoId:
+                          type: string
+                          example: "photo123"
+                        likesCount:
+                          type: integer
+                          example: 0
+                        comments:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              commentId:
+                                type: string
+                                example: "comment456"
+                              userId:
+                                type: string
+                                example: "abcdef012345"
+                              comment:
+                                type: string
+                                example: "Great photo!"
         '404':
           description: User not found
       # Add necessary parameters and request/response details
@@ -160,9 +215,35 @@ paths:
       responses:
         '200':
           description: User stream retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    photoId:
+                      type: string
+                      example: "photo123"
+                    likesCount:
+                      type: integer
+                      example: 0
+                    comments:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          commentId:
+                            type: string
+                            example: "comment456"
+                          userId:
+                            type: string
+                            example: "abcdef012345"
+                          comment:
+                            type: string
+                            example: "Great photo!"
         '404':
           description: User not found
-      # Add necessary parameters and request/response details
 
   /v1/like_photo:
     post:
@@ -170,12 +251,33 @@ paths:
       operationId: likePhoto
       tags:
         - "photo"
+      requestBody:
+        description: Like details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                photoId:
+                  type: string
+                  example: "photo123"
+                userId:
+                  type: string
+                  example: "abcdef012345"
+        required: true
       responses:
         '201':
           description: Photo liked successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  likesCount:
+                    type: integer
+                    example: 1
         '400':
-          description: Bad request
-      # Add necessary parameters and request/response details
+           description: Bad request
 
   /v1/unlike_photo:
     post:
@@ -183,12 +285,33 @@ paths:
       operationId: unlikePhoto
       tags:
         - "photo"
+      requestBody:
+        description: Like details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                photoId:
+                  type: string
+                  example: "photo123"
+                userId:
+                  type: string
+                  example: "abcdef012345"
+        required: true
       responses:
         '201':
           description: Photo unliked successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  likesCount:
+                    type: integer
+                    example: 0
         '400':
-          description: Bad request
-      # Add necessary parameters and request/response details
+           description: Bad request
 
   /v1/comment_photo:
     post:
@@ -196,12 +319,42 @@ paths:
       operationId: commentPhoto
       tags:
         - "photo"
+      requestBody:
+        description: Comment details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                photoId:
+                  type: string
+                  example: "photo123"
+                userId:
+                  type: string
+                  example: "abcdef012345"
+                comment:
+                  type: string
+                  example: "Great photo!"
+        required: true
       responses:
         '201':
           description: Photo commented successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  commentId:
+                    type: string
+                    example: "comment456"
+                  userId:
+                    type: string
+                    example: "abcdef012345"
+                  comment:
+                    type: string
+                    example: "Great photo!"
         '400':
-          description: Bad request
-      # Add necessary parameters and request/response details
+           description: Bad request
 
   /v1/uncomment_photo:
     delete:
@@ -209,12 +362,28 @@ paths:
       operationId: uncommentPhoto
       tags:
         - "photo"
+      requestBody:
+        description: Comment details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                photoId:
+                  type: string
+                  example: "photo123"
+                commentId:
+                  type: string
+                  example: "comment456"
+                userId:
+                  type: string
+                  example: "abcdef012345"
+        required: true
       responses:
         '201':
           description: Comment removed successfully
         '400':
-          description: Bad request
-      # Add necessary parameters and request/response details
+           description: Bad request
 
   /v1/delete_photo:
     delete:
@@ -222,9 +391,22 @@ paths:
       operationId: deletePhoto
       tags:
         - "photo"
+      requestBody:
+        description: Photo details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                photoId:
+                  type: string
+                  example: "photo123"
+                userId:
+                  type: string
+                  example: "abcdef012345"
+        required: true
       responses:
         '201':
           description: Photo deleted successfully
         '400':
-          description: Bad request
-      # Add necessary parameters and request/response details
+           description: Bad request
