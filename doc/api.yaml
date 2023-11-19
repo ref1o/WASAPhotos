@@ -26,7 +26,6 @@ paths:
     post:
       tags:
         - "login"
-        - "user"
       summary: Logs in the user
       description: |-
         If the user does not exist, it will be created,
@@ -35,6 +34,7 @@ paths:
       operationId: doLogin
       requestBody:
         description: User details
+        required: true
         content:
           application/json:
             schema:
@@ -46,7 +46,6 @@ paths:
                   pattern: 'ˆ.*?$'
                   minLength: 3
                   maxLength: 16
-        required: true
       responses:
         '201':
           description: User log-in action successful
@@ -59,19 +58,43 @@ paths:
                     type: string
                     example: "abcdef012345"
 
-  /v1/set_my_user_name:
+  /v1/users/{userId}/set-username:
     put:
       summary: Set user's username
       operationId: setMyUserName
       tags:
         - "user"
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: User details for updating username
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newUsername:
+                  type: string
+                  example: "new_username"
       responses:
         '200':
           description: User username updated successfully
+          content:
+            application/json:
+              example: {"message": "Username updated successfully"}
         '400':
           description: Bad request
+          content:
+            application/json:
+              example: {"error": "Bad request"}
 
-  /v1/upload_photo:
+  /v1/photos/upload:
     post:
       summary: Upload a photo
       operationId: uploadPhoto
@@ -79,18 +102,18 @@ paths:
         - "photo"
       requestBody:
         description: Photo details
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                photoId:
-                  type: string
-                  example: "photo123"
                 userId:
                   type: string
                   example: "abcdef012345"
-        required: true
+                photoData:
+                  type: string
+                  example: "base64encodedimagedata"
       responses:
         '201':
           description: Photo uploaded successfully
@@ -107,65 +130,127 @@ paths:
                     example: 0
         '400':
            description: Bad request
+           content:
+             application/json:
+               example: {"error": "Bad request"}
 
-  /v1/follow_user:
+  /v1/users/{userId}/follow:
     post:
       summary: Follow a user
       operationId: followUser
       tags:
         - "user"
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user to follow
+          required: true
+          schema:
+            type: string
       responses:
         '201':
           description: User followed successfully
+          content:
+            application/json:
+              example: {"message": "User followed successfully"}
         '400':
           description: Bad request
+          content:
+            application/json:
+              example: {"error": "Bad request"}
       # Add necessary parameters and request/response details
 
-  /v1/unfollow_user:
+  /v1/users/{userId}/unfollow:
     post:
       summary: Unfollow a user
       operationId: unfollowUser
       tags:
         - "user"
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user to unfollow
+          required: true
+          schema:
+            type: string
       responses:
         '201':
           description: User unfollowed successfully
+          content:
+            application/json:
+              example: {"message": "User unfollowed successfully"}
         '400':
           description: Bad request
+          content:
+            application/json:
+              example: {"error": "Bad request"}
       # Add necessary parameters and request/response details
 
-  /v1/ban_user:
+  /v1/users/{userId}/ban:
     post:
       summary: Ban a user
       operationId: banUser
       tags:
         - "user"
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user to ban
+          required: true
+          schema:
+            type: string
       responses:
         '201':
           description: User banned successfully
+          content:
+            application/json:
+              example: {"message": "User banned successfully"}
         '400':
           description: Bad request
+          content:
+            application/json:
+              example: {"error": "Bad request"}
       # Add necessary parameters and request/response details
 
-  /v1/unban_user:
+  /v1/users/{userId}/unban:
     post:
       summary: Unban a user
       operationId: unbanUser
       tags:
         - "user"
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user to unban
+          required: true
+          schema:
+            type: string
       responses:
         '201':
           description: User unbanned successfully
+          content:
+            application/json:
+              example: {"message": "User unbanned successfully"}
         '400':
           description: Bad request
+          content:
+            application/json:
+              example: {"error": "Bad request"}
       # Add necessary parameters and request/response details
 
-  /v1/get_user_profile:
+  /v1/users/{userId}/profile:
     get:
       summary: Get user profile
       operationId: getUserProfile
       tags:
         - "user"
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: User profile retrieved successfully
@@ -204,14 +289,28 @@ paths:
                                 example: "Great photo!"
         '404':
           description: User not found
-      # Add necessary parameters and request/response details
+          content:
+            application/json:
+              example: 
+                userId: "abcdef012345"
+                likedPhotos: 
+                  - photoId: "photo123"
+                    likesCount: 0
+                    comments: []
 
-  /v1/get_my_stream:
+  /v1/users/{userId}/stream:
     get:
       summary: Get user's photo stream
       operationId: getMyStream
       tags:
         - "photo"
+      parameters:
+        - name: userId
+          in: path
+          description: The ID of the user
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: User stream retrieved successfully
@@ -244,27 +343,34 @@ paths:
                             example: "Great photo!"
         '404':
           description: User not found
+          content:
+            application/json:
+              example: {"error": "User not found"}
 
-  /v1/like_photo:
+  /v1/photos/{photoId}/like:
     post:
       summary: Like a photo
       operationId: likePhoto
       tags:
         - "photo"
+      parameters:
+        - name: photoId
+          in: path
+          description: The ID of the photo to like
+          required: true
+          schema:
+            type: string
       requestBody:
         description: Like details
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                photoId:
-                  type: string
-                  example: "photo123"
                 userId:
                   type: string
                   example: "abcdef012345"
-        required: true
       responses:
         '201':
           description: Photo liked successfully
@@ -276,29 +382,39 @@ paths:
                   likesCount:
                     type: integer
                     example: 1
+              examples:
+                application/json:
+                  value: {"likesCount": 1}
         '400':
-           description: Bad request
+          description: Bad request
+          content:
+            application/json:
+              example: {"error": "Bad request"}
 
-  /v1/unlike_photo:
+  /v1/photos/{photoId}/unlike:
     post:
       summary: Unlike a photo
       operationId: unlikePhoto
       tags:
         - "photo"
+      parameters:
+        - name: photoId
+          in: path
+          description: The ID of the photo to unlike
+          required: true
+          schema:
+            type: string
       requestBody:
         description: Like details
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                photoId:
-                  type: string
-                  example: "photo123"
                 userId:
                   type: string
                   example: "abcdef012345"
-        required: true
       responses:
         '201':
           description: Photo unliked successfully
@@ -310,32 +426,45 @@ paths:
                   likesCount:
                     type: integer
                     example: 0
+              examples:
+                application/json:
+                  value: {"likesCount": 0}
         '400':
-           description: Bad request
+          description: Bad request
+          content:
+            application/json:
+              example: {"error": "Bad request"}
 
-  /v1/comment_photo:
+  /v1/photos/{photoId}/comment:
     post:
       summary: Comment on a photo
       operationId: commentPhoto
       tags:
         - "photo"
+      parameters:
+        - name: photoId
+          in: path
+          description: The ID of the photo to comment on
+          required: true
+          schema:
+            type: string
       requestBody:
         description: Comment details
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                photoId:
-                  type: string
-                  example: "photo123"
                 userId:
                   type: string
                   example: "abcdef012345"
                 comment:
                   type: string
                   example: "Great photo!"
-        required: true
+            examples:
+              application/json:
+                value: {"userId": "abcdef012345", "comment": "Great photo!"}
       responses:
         '201':
           description: Photo commented successfully
@@ -353,60 +482,65 @@ paths:
                   comment:
                     type: string
                     example: "Great photo!"
+              examples:
+                application/json:
+                  value: {"commentId": "comment456", "userId": "abcdef012345", "comment": "Great photo!"}
         '400':
-           description: Bad request
+          description: Bad request
+          content:
+            application/json:
+              example: {"error": "Bad request"}
 
-  /v1/uncomment_photo:
+  /v1/photos/{photoId}/uncomment:
     delete:
       summary: Remove a comment from a photo
       operationId: uncommentPhoto
       tags:
         - "photo"
-      requestBody:
-        description: Comment details
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                photoId:
-                  type: string
-                  example: "photo123"
-                commentId:
-                  type: string
-                  example: "comment456"
-                userId:
-                  type: string
-                  example: "abcdef012345"
-        required: true
+      parameters:
+        - name: photoId
+          in: path
+          description: The ID of the photo to remove a comment from
+          required: true
+          schema:
+            type: string
       responses:
         '201':
           description: Comment removed successfully
+          content:
+            application/json:
+              example: {"message": "Comment removed successfully"}
         '400':
            description: Bad request
+           content:
+             application/json:
+               example: {"error": "Bad request"}
 
-  /v1/delete_photo:
+  /v1/photos/{photoId}/delete:
     delete:
       summary: Delete a photo
       operationId: deletePhoto
       tags:
         - "photo"
-      requestBody:
-        description: Photo details
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                photoId:
-                  type: string
-                  example: "photo123"
-                userId:
-                  type: string
-                  example: "abcdef012345"
-        required: true
+      parameters:
+        - name: photoId
+          in: path
+          description: The ID of the photo to delete
+          required: true
+          schema:
+            type: string
       responses:
         '201':
           description: Photo deleted successfully
+          content:
+            application/json:
+              examples:
+                application/json:
+                  value: {"message": "Photo deleted successfully"}
         '400':
            description: Bad request
+           content:
+             application/json:
+               examples:
+                 application/json:
+                   value: {"error": "Bad request"}
