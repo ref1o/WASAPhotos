@@ -158,7 +158,6 @@ paths:
           content:
             application/json:
               example: {"error": "Bad request"}
-      # Add necessary parameters and request/response details
 
   /v1/users/{userId}/unfollow:
     post:
@@ -184,7 +183,6 @@ paths:
           content:
             application/json:
               example: {"error": "Bad request"}
-      # Add necessary parameters and request/response details
 
   /v1/users/{userId}/ban:
     post:
@@ -210,7 +208,6 @@ paths:
           content:
             application/json:
               example: {"error": "Bad request"}
-      # Add necessary parameters and request/response details
 
   /v1/users/{userId}/unban:
     post:
@@ -236,7 +233,6 @@ paths:
           content:
             application/json:
               example: {"error": "Bad request"}
-      # Add necessary parameters and request/response details
 
   /v1/users/{userId}/profile:
     get:
