@@ -2,10 +2,7 @@ openapi: 3.0.3
 info:
   title: WASAPhoto API
   description: "Web and Software Architecture Exam Project"
-  version: "1.0.0"
-
-servers:
-  - url: /v1 
+  version: "1.0.0" 
 
 tags:
  - name: "login"
@@ -43,7 +40,7 @@ paths:
                 name:
                   type: string
                   example: Maria
-                  pattern: 'ˆ.*?$'
+                  pattern: "^.*?$"
                   minLength: 3
                   maxLength: 16
       responses:
@@ -58,7 +55,7 @@ paths:
                     type: string
                     example: "abcdef012345"
 
-  /v1/users/{userId}/set-username:
+  /v1/users/{userId}/username:
     put:
       summary: Set user's username
       operationId: setMyUserName
@@ -82,6 +79,9 @@ paths:
                 newUsername:
                   type: string
                   example: "new_username"
+                  pattern: "^.*?$"
+                  minLength: 3
+                  maxLength: 16
       responses:
         '200':
           description: User username updated successfully
@@ -111,6 +111,9 @@ paths:
                 userId:
                   type: string
                   example: "abcdef012345"
+                  pattern: "^.*?$"
+                  minLength: 3
+                  maxLength: 16
                 photoData:
                   type: string
                   example: "base64encodedimagedata"
@@ -125,6 +128,9 @@ paths:
                   photoId:
                     type: string
                     example: "photo123"
+                    pattern: "^.*?$"
+                    minLength: 3
+                    maxLength: 16
                   likesCount:
                     type: integer
                     example: 0
@@ -258,6 +264,9 @@ paths:
                   userId:
                     type: string
                     example: "abcdef012345"
+                    pattern: "^.*?$"
+                    minLength: 3
+                    maxLength: 16
                   likedPhotos:
                     type: array
                     items:
@@ -266,6 +275,9 @@ paths:
                         photoId:
                           type: string
                           example: "photo123"
+                          pattern: "^.*?$"
+                          minLength: 3
+                          maxLength: 16
                         likesCount:
                           type: integer
                           example: 0
@@ -277,12 +289,21 @@ paths:
                               commentId:
                                 type: string
                                 example: "comment456"
+                                pattern: "^.*?$"
+                                minLength: 3
+                                maxLength: 16
                               userId:
                                 type: string
                                 example: "abcdef012345"
+                                pattern: "^.*?$"
+                                minLength: 3
+                                maxLength: 16
                               comment:
                                 type: string
                                 example: "Great photo!"
+                                pattern: "^.*?$"
+                                minLength: 3
+                                maxLength: 16
         '404':
           description: User not found
           content:
@@ -320,6 +341,9 @@ paths:
                     photoId:
                       type: string
                       example: "photo123"
+                      pattern: "^.*?$"
+                      minLength: 3
+                      maxLength: 16
                     likesCount:
                       type: integer
                       example: 0
@@ -331,12 +355,21 @@ paths:
                           commentId:
                             type: string
                             example: "comment456"
+                            pattern: "^.*?$"
+                            minLength: 3
+                            maxLength: 16
                           userId:
                             type: string
                             example: "abcdef012345"
+                            pattern: "^.*?$"
+                            minLength: 3
+                            maxLength: 16
                           comment:
                             type: string
                             example: "Great photo!"
+                            pattern: "^.*?$"
+                            minLength: 3
+                            maxLength: 16
         '404':
           description: User not found
           content:
@@ -367,6 +400,9 @@ paths:
                 userId:
                   type: string
                   example: "abcdef012345"
+                  pattern: "^.*?$"
+                  minLength: 3
+                  maxLength: 16
       responses:
         '201':
           description: Photo liked successfully
@@ -411,6 +447,9 @@ paths:
                 userId:
                   type: string
                   example: "abcdef012345"
+                  pattern: "^.*?$"
+                  minLength: 3
+                  maxLength: 16
       responses:
         '201':
           description: Photo unliked successfully
@@ -455,9 +494,15 @@ paths:
                 userId:
                   type: string
                   example: "abcdef012345"
+                  pattern: "^.*?$"
+                  minLength: 3
+                  maxLength: 16
                 comment:
                   type: string
                   example: "Great photo!"
+                  pattern: "^.*?$"
+                  minLength: 3
+                  maxLength: 16
             examples:
               application/json:
                 value: {"userId": "abcdef012345", "comment": "Great photo!"}
@@ -472,12 +517,21 @@ paths:
                   commentId:
                     type: string
                     example: "comment456"
+                    pattern: "^.*?$"
+                    minLength: 3
+                    maxLength: 16
                   userId:
                     type: string
                     example: "abcdef012345"
+                    pattern: "^.*?$"
+                    minLength: 3
+                    maxLength: 16
                   comment:
                     type: string
                     example: "Great photo!"
+                    pattern: "^.*?$"
+                    minLength: 3
+                    maxLength: 16
               examples:
                 application/json:
                   value: {"commentId": "comment456", "userId": "abcdef012345", "comment": "Great photo!"}
