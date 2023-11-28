@@ -269,6 +269,8 @@ paths:
                     maxLength: 16
                   likedPhotos:
                     type: array
+                    minItems: 1
+                    maxItems: 5000
                     items:
                       type: object
                       properties:
@@ -283,6 +285,8 @@ paths:
                           example: 0
                         comments:
                           type: array
+                          minItems: 1
+                          maxItems: 5000
                           items:
                             type: object
                             properties:
@@ -335,6 +339,8 @@ paths:
             application/json:
               schema:
                 type: array
+                minItems: 1
+                maxItems: 5000
                 items:
                   type: object
                   properties:
@@ -349,6 +355,8 @@ paths:
                       example: 0
                     comments:
                       type: array
+                      minItems: 1
+                      maxItems: 5000
                       items:
                         type: object
                         properties:
