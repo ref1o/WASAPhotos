@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: WASAphoto API
+  title: WASAPhotos API
   description: |
-    WASAphoto homework - 1989113.
+    WASAPhotos homework - 1989113.
   version: 0.0.1
 
 tags:
