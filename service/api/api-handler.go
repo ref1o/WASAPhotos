@@ -7,37 +7,37 @@ import (
 // Handler returns an instance of httprouter.Router that handle APIs registered here
 func (rt *_router) Handler() http.Handler {
 
-	// login
+	// Login enpoint
 	rt.router.POST("/session", rt.wrap(rt.sessionHandler))
 
-	// search
+	// Search endpoint
 	rt.router.GET("/users", rt.wrap(rt.getUsersQuery))
 
-	// user
+	// User Endpoint
 	rt.router.PUT("/users/:id", rt.wrap(rt.putNickname))
 	rt.router.GET("/users/:id", rt.wrap(rt.getUserProfile))
 
-	// ban
+	// Ban endpoint
 	rt.router.PUT("/users/:id/banned_users/:banned_id", rt.wrap(rt.putBan))
 	rt.router.DELETE("/users/:id/banned_users/:banned_id", rt.wrap(rt.deleteBan))
 
-	// followers
+	// Followers endpoint
 	rt.router.PUT("/users/:id/followers/:follower_id", rt.wrap(rt.putFollow))
 	rt.router.DELETE("/users/:id/followers/:follower_id", rt.wrap(rt.deleteFollow))
 
-	// stream
+	// Stream endpoint
 	rt.router.GET("/users/:id/home", rt.wrap(rt.getHome))
 
-	// photo
+	// Photo Endpoint
 	rt.router.POST("/users/:id/photos", rt.wrap(rt.postPhoto))
 	rt.router.DELETE("/users/:id/photos/:photo_id", rt.wrap(rt.deletePhoto))
 	rt.router.GET("/users/:id/photos/:photo_id", rt.wrap(rt.getPhoto))
 
-	// comments
+	// Comments endpoint
 	rt.router.POST("/users/:id/photos/:photo_id/comments", rt.wrap(rt.postComment))
 	rt.router.DELETE("/users/:id/photos/:photo_id/comments/:comment_id", rt.wrap(rt.deleteComment))
 
-	// likes
+	// Likes endpoint
 	rt.router.PUT("/users/:id/photos/:photo_id/likes/:like_id", rt.wrap(rt.putLike))
 	rt.router.DELETE("/users/:id/photos/:photo_id/likes/:like_id", rt.wrap(rt.deleteLike))
 

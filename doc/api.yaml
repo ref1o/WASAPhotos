@@ -1,21 +1,30 @@
 openapi: 3.0.3
 info:
-  title: WASAPhotos API
+  title: WASAphoto API
   description: |
-    WASAPhotos homework - 1989113.
+    This is the API for the WASAphoto Homework 1 for the WaSa course by 1849661.
   version: 0.0.1
 
 tags:
   - name: "login"
+    description: Endpoint that manages the login
   - name: "search"
+    description: Endpoint that manages search
   - name: "user"
-  - name: "stream"
-  - name: "followers"
+    description: Endpoint that manages users
   - name: "ban"
+    description: Endpoint that manages banned users
+  - name: "followers"
+    description: Endpoint that manages followers
+  - name: "stream"
+    description: Endpoint that manages stream
   - name: "photo"
-  - name: "likes"
+    description: Endpoint that manages photos
   - name: "comments"
-#----------------------------------------------------------
+    description: Endpoint that manages comments
+  - name: "likes"
+    description: Endpoint that manages likes
+#=====================================================================================
 paths:
   /session:
     post:
@@ -41,7 +50,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/login_return"
-#----------------------------------------------------------
+#=====================================================================================
   /users:
     get:
       tags: ["search"]
@@ -64,7 +73,7 @@ paths:
           
       security:
         - bearerAuth: [] 
-#----------------------------------------------------------
+#=====================================================================================
   /users/{id}:
     parameters: 
         - $ref: "#/components/parameters/identifier"
@@ -121,7 +130,7 @@ paths:
           
       security:
         - bearerAuth: [] 
-#----------------------------------------------------------
+#=====================================================================================
   /users/{id}/banned_users/{banned_user_id}:
     parameters:
         - $ref: "#/components/parameters/banned_user_id"
@@ -168,7 +177,7 @@ paths:
       
       security:
         - bearerAuth: [] 
-#----------------------------------------------------------
+#=====================================================================================
   /users/{id}/followers/{follower_id}:
     parameters:
         - $ref: "#/components/parameters/follower_id"
@@ -217,7 +226,7 @@ paths:
           
       security:
         - bearerAuth: [] 
-#----------------------------------------------------------
+#=====================================================================================
   /users/{id}/home:
     parameters: 
         - $ref: '#/components/parameters/identifier'
@@ -242,7 +251,7 @@ paths:
           
       security:
         - bearerAuth: [] 
-#----------------------------------------------------------
+#=====================================================================================
   /users/{id}/photos:
     parameters: 
         - $ref: '#/components/parameters/identifier'
@@ -274,7 +283,7 @@ paths:
           
       security:
         - bearerAuth: [] 
-#----------------------------------------------------------
+#=====================================================================================
   /users/{id}/photos/{photo_id}:
     parameters: 
         - $ref: '#/components/parameters/identifier'
@@ -322,7 +331,7 @@ paths:
           
       security:
         - bearerAuth: [] 
-#----------------------------------------------------------
+#=====================================================================================
   /users/{id}/photos/{photo_id}/comments:
     parameters: 
         - $ref: '#/components/parameters/identifier'
@@ -356,7 +365,7 @@ paths:
           
       security:
         - bearerAuth: [] 
-#----------------------------------------------------------
+#=====================================================================================
   /users/{id}/photos/{photo_id}/comments/{comment_id}:
     parameters: 
         - $ref: '#/components/parameters/identifier'
@@ -383,7 +392,7 @@ paths:
           
       security:
         - bearerAuth: [] 
-#----------------------------------------------------------
+#=====================================================================================
   /users/{id}/photos/{photo_id}/likes/{like_id}:
     parameters: 
         - $ref: '#/components/parameters/identifier'
@@ -431,8 +440,8 @@ paths:
           
       security:
         - bearerAuth: [] 
-#----------------------------------------------------------
-#__________________________________________________________
+#=====================================================================================
+#_____________________________________________________________________________________________________
 components:
 
   parameters:
@@ -446,7 +455,7 @@ components:
         description: String between 3-16 characters
         type: string
         pattern: '^.*?$'
-        example: Giuseppe420
+        example: Marietto64
         minLength: 3
         maxLength: 16
         readOnly: true
@@ -481,7 +490,7 @@ components:
       required: true
       schema: 
         $ref: "#/components/schemas/user_nickname/properties/nickname"
-      example: "Cavallo"
+      example: "Piccioni"
 #........................................................       
     like_id:
       name: like_id
@@ -490,7 +499,7 @@ components:
       required: true
       schema: 
         $ref: "#/components/schemas/user_nickname/properties/nickname"
-      example: "LoFiBoy"
+      example: "LauraZ"
 #........................................................       
     banned_user_id:
       name: banned_user_id
@@ -499,7 +508,7 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/user_nickname/properties/nickname"
-      example: "Cosmo"
+      example: "Akille"
 #........................................................      
     query_id:
       name: id
@@ -511,10 +520,10 @@ components:
         pattern: '^.*?$'
         minLength: 3
         maxLength: 16
-        example: "Mhanz98"
-      example: "Mhanzone98"
+        example: "Luis64"
+      example: "luigi64"
 #........................................................  
-#________________________________________________________
+#_____________________________________________________________________________________________________
   schemas:
 
     user_nickname:
@@ -527,12 +536,12 @@ components:
           minLength: 3
           maxLength: 16
           pattern: '^.*?$'
-          example: "Giolitti"
+          example: "PulpFiction"
       example:
-        nickname: "JoeLitty"
+        nickname: "PolpoFizione"
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||   
     complete_user:
-      description: Contains both unique identifier and nickname of a user
+      description: Contains both *unique identifier and nickname of a user
       type: object
       properties:
         user_id:
@@ -540,11 +549,11 @@ components:
         nickname:
           $ref: "#/components/schemas/user_nickname/properties/nickname"
       example:
-        user_id: "Cipolla69"
-        nickname: "XxCipollaxX"
+        user_id: "Bro9999"
+        nickname: "YourBro"
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||   
     comment_identifier:
-      description: It's a comment unique id
+      description: It's a comment *unique* id
       type: object
       properties:
         comment_id:
@@ -559,7 +568,7 @@ components:
         comment_id: 965
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||        
     comment:
-      description: A user's comment contains the text of the comment and the identifier of who commented
+      description: A user's comment contains the text of the comment and the *identifier* of who commented
       type: object
       properties:
         user_id: 
@@ -571,7 +580,7 @@ components:
           minLength: 1
           maxLength: 30
           pattern: '^.*?$'
-          example: Bella foto uagliù
+          example: OK my bruh
           description: String value of the comment
         comment_id:
           $ref: "#/components/schemas/comment_identifier/properties/comment_id"
@@ -579,7 +588,7 @@ components:
         user_id: "PannaBoy22"
         nickname: "22creammm"
         photo_id: 873
-        comment: "Great photo!"    
+        comment: "Wow che foto spectacularesss"    
         comment_id: 16
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||
     raw_photo:
@@ -785,7 +794,7 @@ components:
                   - user_id: "raffaello"
                     nickname: "raffaello99"
                     
-                  date: 2023-12-13T15:27:14Z
+                  date: 2022-11-22T13:10:14Z
                   photo_id: 7836
                   owner: "PulpFiction"
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||            
@@ -803,7 +812,7 @@ components:
         identifier:
           $ref: "#/components/schemas/user_nickname/properties/nickname"
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-#________________________________________________________
+#_____________________________________________________________________________________________________  
   responses:
 #''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     no_content:
