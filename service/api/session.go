@@ -22,7 +22,7 @@ func (rt *_router) sessionHandler(w http.ResponseWriter, r *http.Request, ps htt
 		_ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INVALID_JSON_ERROR_MSG})
 		return
 	} else if !validIdentifier(user.IdUser) {
-		//Here we checked the user identifier and we discovered that it's not valid
+		// Here we checked the user identifier and we discovered that it's not valid
 		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INVALID_IDENTIFIER_ERROR_MSG})
 		return
