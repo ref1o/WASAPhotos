@@ -7,10 +7,10 @@ import (
 	"io/fs"
 	"net/http"
 	"strings"
-	"wasaphoto/webui"
+	"wasaphoto-1849661/webui"
 )
 
-func RegisterWebUI(hdl http.Handler) (http.Handler, error) {
+func registerWebUI(hdl http.Handler) (http.Handler, error) {
 	distDirectory, err := fs.Sub(webui.Dist, "dist")
 	if err != nil {
 		return nil, fmt.Errorf("error embedding WebUI dist/ directory: %w", err)

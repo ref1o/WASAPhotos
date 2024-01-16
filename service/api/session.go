@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"wasaphoto/service/api/reqcontext"
+	"wasaphoto-1849661/service/api/reqcontext"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -19,12 +19,13 @@ func (rt *_router) sessionHandler(w http.ResponseWriter, r *http.Request, ps htt
 		// The body was not a parseable JSON, reject it
 		w.WriteHeader(http.StatusBadRequest)
 		// controllaerrore
-		_ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INVALID_JSON_ERROR_MSG})
+		// _ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INVALID_JSON_ERROR_MSG})
 		return
 	} else if !validIdentifier(user.IdUser) {
 		// Here we checked the user identifier and we discovered that it's not valid
 		w.WriteHeader(http.StatusBadRequest)
-		_ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INVALID_IDENTIFIER_ERROR_MSG})
+		// controllaerrore
+		// _ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INVALID_IDENTIFIER_ERROR_MSG})
 		return
 	}
 

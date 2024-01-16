@@ -2,8 +2,7 @@ package api
 
 import (
 	"time"
-
-	"wasaphoto/service/database"
+	"wasaphoto-1849661/service/database"
 )
 
 // Error messages

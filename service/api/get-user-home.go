@@ -3,8 +3,8 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-	"wasaphoto/service/api/reqcontext"
-	"wasaphoto/service/database"
+	"wasaphoto-1849661/service/api/reqcontext"
+	"wasaphoto-1849661/service/database"
 
 	"github.com/julienschmidt/httprouter"
 )

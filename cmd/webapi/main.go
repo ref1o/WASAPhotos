@@ -33,10 +33,9 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-
-	"wasaphoto/service/api"
-	"wasaphoto/service/database"
-	"wasaphoto/service/globaltime"
+	"wasaphoto-1849661/service/api"
+	"wasaphoto-1849661/service/database"
+	"wasaphoto-1849661/service/globaltime"
 
 	"github.com/ardanlabs/conf"
 	_ "github.com/mattn/go-sqlite3"
@@ -63,7 +62,7 @@ func main() {
 func run() error {
 	rand.Seed(globaltime.Now().UnixNano())
 	// Load Configuration and defaults
-	cfg, err := LoadConfiguration()
+	cfg, err := loadConfiguration()
 	if err != nil {
 		if errors.Is(err, conf.ErrHelpWanted) {
 			return nil
@@ -122,14 +121,14 @@ func run() error {
 	}
 	router := apirouter.Handler()
 
-	router, err = RegisterWebUI(router)
+	router, err = registerWebUI(router)
 	if err != nil {
 		logger.WithError(err).Error("error registering web UI handler")
 		return fmt.Errorf("registering web UI handler: %w", err)
 	}
 
 	// Apply CORS policy
-	router = ApplyCORSHandler(router)
+	router = applyCORSHandler(router)
 
 	// Create the API server
 	apiserver := http.Server{

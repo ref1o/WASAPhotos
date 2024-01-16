@@ -40,7 +40,7 @@ import (
 	"errors"
 	"net/http"
 	"path/filepath"
-	"wasaphoto/service/database"
+	"wasaphoto-1849661/service/database"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/sirupsen/logrus"
