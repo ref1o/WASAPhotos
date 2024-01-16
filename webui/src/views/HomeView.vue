@@ -50,9 +50,9 @@ export default {
 
     <div v-if="photos.length === 0" class="row no-content-message">
 	  <div class="vertical-dots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+        <div class="dot-1"></div>
+        <div class="dot-2"></div>
+        <div class="dot-3"></div>
       </div>
 
       <h1 class="d-flex justify-content-center mt-5">
@@ -60,9 +60,9 @@ export default {
       </h1>
 
 	  <div class="vertical-dots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+        <div class="dot-3"></div>
+        <div class="dot-2"></div>
+        <div class="dot-1"></div>
       </div>
 
     </div>
@@ -71,7 +71,7 @@ export default {
 
 <style>
 h1{
-	margin-top: 0;
+	margin-bottom: 45px;
 }
 
 .home-view {
@@ -93,9 +93,25 @@ h1{
   justify-content: center;
 }
 
-.dot {
+.dot-1 {
   width: 10px;
   height: 10px;
+  background-color: #F09A93;
+  border-radius: 50%;
+  margin: 10px 0;
+}
+
+.dot-2 {
+  width: 12px;
+  height: 12px;
+  background-color: #F09A93;
+  border-radius: 50%;
+  margin: 10px 0;
+}
+
+.dot-3 {
+  width: 14px;
+  height: 14px;
   background-color: #F09A93;
   border-radius: 50%;
   margin: 10px 0;

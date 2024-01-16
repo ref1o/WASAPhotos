@@ -6,6 +6,14 @@ export default {
       iconProfile: "fa-regular",
     };
   },
+  computed:{
+  currentPath(){
+    return this.$route.params.id
+  },
+  sameUser(){
+    return this.$route.params.id === localStorage.getItem('token')
+  }
+  },
   methods: {
     logout() {
       localStorage.removeItem("token");
@@ -28,38 +36,75 @@ export default {
       this.iconProfile = "fa-solid";
     },
     async uploadFile() {
-      let fileInput = document.getElementById("fileUploader");
+      try {
+          let fileInput = document.getElementById('fileUploader');
+          const file = fileInput.files[0];
+          const reader = new FileReader();
 
-      const file = fileInput.files[0];
-      const reader = new FileReader();
+          reader.readAsArrayBuffer(file);
 
-      reader.readAsArrayBuffer(file);
+          reader.onload = async () => {
+              const token = localStorage.getItem('token');
+              if (token) {
+                  // Post photo: /users/:id/photos
+                  let response = await this.$axios.post(`/users/${token}/photos`, reader.result, {
+                      headers: {
+                          'Content-Type': file.type,
+                          'Authorization': `Bearer ${token}`,
+                      },
+                  });
 
-      reader.onload = async () => {
-        // Post photo: /users/:id/photos
-        try {
-          let response = await this.$axios.post(
-            "/users/" + this.$route.params.id + "/photos",
-            reader.result,
-            {
-              headers: {
-                "Content-Type": file.type,
-              },
-            }
-          );
-          this.$emit("photoUploaded", response.data); // Emit an event to notify the parent component about the uploaded photo
-        } catch (error) {
-          console.error("Error uploading photo:", error);
-          // Puoi gestire l'errore come preferisci, ad esempio mostrando un messaggio all'utente
+                  this.photos.unshift(response.data);
+                  this.postCnt += 1;
+              } else {
+                  console.error('Token di autenticazione mancante.');
+              }
+          };
+      } catch (error) {
+          console.error('Errore durante il caricamento della foto:', error);
+      }
+    },
+
+    async loadInfo(){
+      if (this.$route.params.id === undefined){
+          return
+      }
+
+			try{
+                // Get user profile: /users/:id
+				let response = await this.$axios.get("/users/"+this.$route.params.id);
+
+        this.banStatus = false
+        this.userExists = true
+        this.currentIsBanned = false
+
+        if (response.status === 206){
+            this.banStatus = true
+            return
         }
-      };
-    },
 
-    // Aggiunto il metodo per emettere l'evento quando si clicca su "+"
-    addPhoto() {
-      document.getElementById("fileUploader").click();
-    },
+				if (response.status === 204){
+					this.userExists = false
+				}
+				
+        this.nickname = response.data.nickname
+				this.followerCnt = response.data.followers != null ? response.data.followers.length : 0
+				this.followingCnt = response.data.following != null? response.data.following.length : 0
+				this.postCnt = response.data.posts != null ? response.data.posts.length : 0
+				this.followStatus = response.data.followers != null ? response.data.followers.find(obj => obj.user_id === localStorage.getItem('token')) : false
+        this.photos = response.data.posts != null ? response.data.posts : []
+        this.followers = response.data.followers != null ? response.data.followers : []
+        this.following = response.data.following != null ? response.data.following : []
+
+			}catch(e){
+				this.currentIsBanned = true
+			}
+		},
+
   },
+  async mounted(){
+		await this.loadInfo()
+	},
 };
 </script>
 
@@ -91,27 +136,35 @@ export default {
     </div>
 
     <div class="col-4 d-flex justify-content-end">
-      <button @click="addPhoto" class="my-trnsp-btn me-2" type="button">
-        <i class="my-nav-icon-plus w-100 h-100 fa-solid fa-plus-circle" style="color: green;"></i>
-      </button>
+      <label for="fileUploader" class="my-btn-add-photo ms-2">
+        <i class="fas fa-plus"></i>
+      </label>
+      <input
+        id="fileUploader"
+        type="file"
+        class="profile-file-upload"
+        @change="uploadFile"
+        accept=".jpg, .png"
+      />
 
       <button @click="myProfile" class="my-trnsp-btn me-2" type="button">
-        <i :class="'my-nav-icon-profile me-1 w-100 h-100 '+iconProfile+ ' fa-user'" @mouseover="profileIconActive" @mouseout="profileIconInactive"></i>
+        <i
+          :class="'my-nav-icon-profile me-1 w-100 h-100 ' + iconProfile + ' fa-user'"
+          @mouseover="profileIconActive"
+          @mouseout="profileIconInactive"
+        ></i>
       </button>
 
       <button @click="logout" class="my-trnsp-btn me-2" type="button">
         <i class="my-nav-icon-quit me-1 w-100 h-100 fa-solid fa-right-from-bracket"></i>
       </button>
     </div>
-
-    <!-- Input nascosto per il caricamento del file -->
-    <input id="fileUploader" type="file" style="display: none" @change="uploadFile" accept=".jpg, .png" />
   </nav>
 </template>
 
 <style>
 body {
-  overflow: hidden;
+  overflow: scroll;
 }
 
 .my-nav {
@@ -128,6 +181,18 @@ body {
   background: transparent;
   border: none;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s;
+}
+
+.my-trnsp-btn:hover {
+  transform: scale(1.2);
+}
+
+.my-trnsp-btn i {
+  font-size: 1.5rem; /* Adjust the icon size */
 }
 
 .my-nav-icon-plus,
@@ -142,8 +207,30 @@ body {
   transform: scale(1.2);
 }
 
-.my-nav-icon-plus:hover {
-  color: green;
+.my-btn-add-photo {
+  background-color: #4caf50; /* Green */
+  border: none;
+  padding: 0.4rem;
+  cursor: pointer;
+  display: flex;
+  margin-right: 1.0rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.my-btn-add-photo:hover {
+  background-color: #45a049; /* Darker green on hover */
   transform: scale(1.2);
+}
+
+.my-btn-add-photo i {
+  color: white;
+  font-size: 1.0rem; /* Adjust the icon size */
+}
+
+#fileUploader {
+  display: none;
 }
 </style>
