@@ -21,48 +21,69 @@ export default {
         },
     },
 
-    mounted(){
-        this.user = localStorage.getItem('token')
+    mounted() {
+        this.user = localStorage.getItem('token');
+        // Debugging: stampa delle props per verificare i valori passati
+        console.log('PhotoComment Mounted:', {
+            content: this.content,
+            author: this.author,
+            photo_owner: this.photo_owner,
+            comment_id: this.comment_id,
+            photo_id: this.photo_id,
+            nickname: this.nickname,
+        });
     }
-
 }
 </script>
 
 <template>
-	<div class="container-fluid">
-
-        <hr>
-        <div class="row">
-            <div class="col-10">
-                <h5>{{nickname}} @{{author}}</h5>
-            </div>
-
-            <div class="col-2">
-                <button v-if="user === author || user === photo_owner" class="btn my-btn-comm" @click="deleteComment">
-                    <i class="fa-regular fa-trash-can my-trash-icon"></i>
-                </button>
-            </div>
-
+    <div class="comment-container">
+        <div class="comment-header">
+            <h5 class="comment-author">{{nickname}} <span class="author-id">@{{author}}</span></h5>
+            <button v-if="user === author || user === photo_owner" class="btn delete-btn" @click="deleteComment">
+                <i class="fa-regular fa-trash-can"></i>
+            </button>
         </div>
-
-        <div class="row">
-            <div class="col-12">
-                {{content}}
-            </div>
-
-        </div>
-        <hr>
+        <p class="comment-content">{{content}}</p>
     </div>
 </template>
 
 <style>
-.my-btn-comm{
-    border: none;
+.comment-container {
+    padding: 10px;
+    margin-bottom: 10px;
 }
-.my-btn-comm:hover{
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-author {
+    margin: 0;
+    font-weight: bold;
+    color: #007bff; /* O scegli un colore che si adatti al tuo tema */
+}
+
+.author-id {
+    font-weight: normal;
+    color: #6c757d;
+}
+
+.delete-btn {
     border: none;
-    color: var(--color-red-danger);
+    background: none;
+    color: #dc3545; /* Colore rosso per il cestino */
+}
+
+.delete-btn:hover {
+    color: #bd2130; /* Colore al passaggio del mouse */
     transform: scale(1.1);
 }
 
+.comment-content {
+    margin-top: 5px;
+    line-height: 1.4;
+}
 </style>

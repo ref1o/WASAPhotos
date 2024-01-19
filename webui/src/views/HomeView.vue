@@ -36,20 +36,22 @@ export default {
   <div class="container-fluid home-view">
     <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
 
-    <div class="row">
-      <Photo
-        v-for="(photo,index) in photos"
-        :key="index"
-        :owner="photo.owner"
-        :photo_id="photo.photo_id"
-        :comments="photo.comments != null ? photo.comments : []"
-        :likes="photo.likes != null ? photo.likes : []"
-        :upload_date="photo.date"
-      />
+    <div class="row justify-content-center"> <!-- Centro le card delle foto -->
+      <div class="photo-card-container"> <!-- Classe personalizzata per la card delle foto -->
+        <Photo
+          v-for="(photo,index) in photos"
+          :key="index"
+          :owner="photo.owner"
+          :photo_id="photo.photo_id"
+          :comments="photo.comments != null ? photo.comments : []"
+          :likes="photo.likes != null ? photo.likes : []"
+          :upload_date="photo.date"
+        />
+      </div>
     </div>
 
     <div v-if="photos.length === 0" class="row no-content-message">
-	  <div class="vertical-dots">
+      <div class="vertical-dots">
         <div class="dot-1"></div>
         <div class="dot-2"></div>
         <div class="dot-3"></div>
@@ -59,17 +61,22 @@ export default {
         Explore the beauty captured by others and share your own moments!
       </h1>
 
-	  <div class="vertical-dots">
+      <div class="vertical-dots">
         <div class="dot-3"></div>
         <div class="dot-2"></div>
         <div class="dot-1"></div>
       </div>
-
     </div>
   </div>
 </template>
 
 <style>
+.photo-card-container {
+  max-width: 800px;
+  width: 100%;
+  padding: 0 15px;
+}
+
 h1{
 	margin-bottom: 45px;
 }

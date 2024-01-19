@@ -1,198 +1,223 @@
 <script>
 export default {
-	data(){
-		return{
+	data() {
+		return {
 			photoURL: "",
 			liked: false,
 			allComments: [],
 			allLikes: [],
-		}
+		};
 	},
 
-	props: ['owner','likes','comments',"upload_date","photo_id","isOwner"], 
+	props: ["owner", "likes", "comments", "upload_date", "photo_id", "isOwner"],
 
-	methods:{
-		loadPhoto(){
+	computed: {
+		formattedUploadDate() {
+			const options = { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" };
+			return new Date(this.upload_date).toLocaleDateString(undefined, options);
+		},
+	},
+
+	methods: {
+		loadPhoto() {
 			// Get photo : "/users/:id/photos/:photo_id"
-			this.photoURL = __API_URL__+ "/users/"+this.owner+"/photos/"+this.photo_id 
+			this.photoURL = __API_URL__ + "/users/" + this.owner + "/photos/" + this.photo_id;
 		},
 
-		async deletePhoto(){
-			try{
+		async deletePhoto() {
+			try {
 				// Delete photo: /users/:id/photos/:photo_id
-				await this.$axios.delete("/users/"+this.owner+"/photos/"+this.photo_id)
-				// location.reload()
-				this.$emit("removePhoto",this.photo_id)
-			}catch(e){
+				await this.$axios.delete("/users/" + this.owner + "/photos/" + this.photo_id);
+				this.$emit("removePhoto", this.photo_id);
+			} catch (e) {
 				//
 			}
 		},
 
-		photoOwnerClick: function(){
-			this.$router.replace("/users/"+this.owner)
+		photoOwnerClick: function() {
+			this.$router.replace("/users/" + this.owner);
 		},
 
 		async toggleLike() {
-
-			if(this.isOwner){ 
-				return
+			if (this.isOwner) {
+				return;
 			}
 
-			const bearer = localStorage.getItem('token')
+			const bearer = localStorage.getItem("token");
 
-			try{
-				if (!this.liked){
-
+			try {
+				if (!this.liked) {
 					// Put like: /users/:id/photos/:photo_id/likes/:like_id"
-					await this.$axios.put("/users/"+ this.owner +"/photos/"+this.photo_id+"/likes/"+ bearer)
+					await this.$axios.put("/users/" + this.owner + "/photos/" + this.photo_id + "/likes/" + bearer);
 					this.allLikes.push({
 						user_id: bearer,
-						nickname: bearer
-					})
-
-				}else{
+						nickname: bearer,
+					});
+				} else {
 					// Delete like: /users/:id/photos/:photo_id/likes/:like_id"
-					await this.$axios.delete("/users/"+ this.owner  +"/photos/"+this.photo_id+"/likes/"+ bearer)
-					this.allLikes.pop()
+					await this.$axios.delete("/users/" + this.owner + "/photos/" + this.photo_id + "/likes/" + bearer);
+					this.allLikes.pop();
 				}
 
 				this.liked = !this.liked;
-			}catch(e){
+			} catch (e) {
 				//
 			}
-      		
-    	},
-
-		removeCommentFromList(value){
-			this.allComments = this.allComments.filter(item=> item.comment_id !== value)
 		},
 
-		addCommentToList(comment){
-			this.allComments.push(comment)
+		removeCommentFromList(value) {
+			this.allComments = this.allComments.filter((item) => item.comment_id !== value);
+		},
+
+		addCommentToList(comment) {
+			this.allComments.push(comment);
+		},
+
+		openLikeModal() {
+			this.$emit("openLikeModal");
 		},
 	},
-	
-	async mounted(){
-		await this.loadPhoto()
 
-		if (this.likes != null){
-			this.allLikes = this.likes
+	async mounted() {
+		await this.loadPhoto();
+
+		if (this.likes != null) {
+			this.allLikes = this.likes;
 		}
 
-		if (this.likes != null){
-			this.liked = this.allLikes.some(obj => obj.user_id === localStorage.getItem('token'))
+		if (this.likes != null) {
+			this.liked = this.allLikes.some((obj) => obj.user_id === localStorage.getItem("token"));
 		}
-		if (this.comments != null){
-			this.allComments = this.comments
+
+		if (this.comments != null) {
+			this.allComments = this.comments;
 		}
-		
-		
 	},
-
-}
+};
 </script>
 
 <template>
-	<div class="container-fluid mt-3 mb-5 ">
-
-        <LikeModal :modal_id="'like_modal'+photo_id" 
-		:likes="allLikes" />
-
-        <CommentModal :modal_id="'comment_modal'+photo_id" 
-		:comments_list="allComments" 
-		:photo_owner="owner" 
-		:photo_id="photo_id"
-
-		@eliminateComment="removeCommentFromList"
-		@addComment="addCommentToList"
-		/>
-
-        <div class="d-flex flex-row justify-content-center">
-
-            <div class="card my-card">
-                <div class="d-flex justify-content-end">
-
-                    <button v-if="isOwner" class="my-trnsp-btn my-dlt-btn me-2" @click="deletePhoto">
-						<!--Delete-->
-						<i class="fa-solid fa-trash w-100 h-100"></i>
+	<div class="photo-card">
+		<LikeModal :modal_id="'like_modal' + photo_id" :likes="allLikes" @openLikeModal="openLikeModal" />
+		<CommentModal :modal_id="'comment_modal' + photo_id" :comments_list="allComments" :photo_owner="owner" :photo_id="photo_id" @eliminateComment="removeCommentFromList" @addComment="addCommentToList" />
+	
+		<div class="photo-card-content">
+			<div class="photo-card-image">
+				<img :src="photoURL" alt="Photo" class="img-fluid" />
+			</div>
+	
+			<div class="photo-card-info">
+				<div class="photo-card-left">
+					<button class="btn btn-light btn-sm me-2" @click="photoOwnerClick">
+					  <b class="no-border">{{ owner }}</b>
 					</button>
-
-                </div>
-                <div class="d-flex justify-content-center photo-background-color">
-                    <img :src="photoURL" class="card-img-top img-fluid">
-                </div>
-
-                <div class="card-body">
-
-                    <div class="container">
-
-                        <div class="d-flex flex-row justify-content-end align-items-center mb-2">
-
-							<button class="my-trnsp-btn m-0 p-1 me-auto" @click="photoOwnerClick">
-                            	<i> From {{owner}}</i>
-							</button>
-
-                            <button class="my-trnsp-btn m-0 p-1 d-flex justify-content-center align-items-center">
-                                <i @click="toggleLike" :class="'me-1 my-heart-color w-100 h-100 fa '+(liked ? 'fa-heart' : 'fa-heart-o') "></i>
-                                <i data-bs-toggle="modal" :data-bs-target="'#like_modal'+photo_id" class="my-comment-color ">
-                                    {{allLikes.length}}
-                                </i>
-                            </button>
-
-                            <button class="my-trnsp-btn m-0 p-1  d-flex justify-content-center align-items-center" 
-							data-bs-toggle="modal" :data-bs-target="'#comment_modal'+photo_id">
-
-                                <i class="my-comment-color fa-regular fa-comment me-1" @click="commentClick"></i>
-                                <i class="my-comment-color-2"> {{allComments != null ? allComments.length : 0}}</i>
-
-                            </button>
-                        </div>
-
-                        <div class="d-flex flex-row justify-content-start align-items-center ">
-                            <p> Uploaded on {{upload_date}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+				</div>
+	
+				<div class="photo-card-right">
+					<button class="btn btn-light btn-sm me-2 no-border" @click="toggleLike">
+					  <i :class="'me-1 fas ' + (liked ? 'fa-heart text-danger' : 'fa-heart text-muted')"></i>
+					  {{ allLikes.length }}
+					</button>
+					<button class="btn btn-light btn-sm no-border" data-bs-toggle="modal" :data-bs-target="'#comment_modal' + photo_id">
+					  <i class="far fa-comment me-1 text-muted"></i>
+					  {{ allComments != null ? allComments.length : 0 }}
+					</button>
+				</div>
+			</div>
+	
+			<div class="photo-card-details" style="text-align: left; margin: 0; padding: 0">
+				<p>Uploaded on {{ formattedUploadDate }}</p>
+			</div>
+		</div>
+	</div>
 </template>
-
-<style>
-.photo-background-color{
-	background-color: grey;
+  
+<style scoped>
+.photo-card {
+	background-color: #fff;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	margin-bottom: 20px;
 }
 
-.my-card{
-	width: 27rem;
-	border-color: black;
-	border-width: thin;
+.photo-card-content {
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
 }
 
-.my-heart-color{
-	color: grey;
+.photo-card-image {
+	width: 100%;
+	max-height: 400px;
+	overflow: hidden;
 }
-.my-heart-color:hover{
+
+.photo-card-image img {
+	width: 100%;
+	height: auto;
+}
+
+.photo-card-info {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 10px;
+}
+
+.photo-card-left {
+	display: flex;
+	align-items: center;
+}
+
+.photo-card-left b {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.photo-card-right {
+	display: flex;
+	align-items: center;
+}
+
+.photo-card-right button:hover .fa-heart {
 	color: red;
 }
 
-.my-comment-color {
-	color: grey;
-}
-.my-comment-color:hover{
-	color: black;
+.photo-card-actions button {
+	font-size: 14px;
+	padding: 6px 12px;
 }
 
-.my-comment-color-2{
-	color:grey
+.photo-card-meta button {
+	font-size: 14px;
+	padding: 6px 12px;
+	display: flex;
+	align-items: center;
+	gap: 5px;
 }
 
-.my-dlt-btn{
-	font-size: 19px;
+.photo-card-meta i {
+	font-size: 16px;
 }
 
-.my-dlt-btn:hover{
-	font-size: 19px;
-	color: var(--color-red-danger);
+.photo-card-details {
+	width: 100%;
+	text-align: left;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.photo-card-details p {
+	font-size: 14px;
+	color: #888;
+	margin: 0;
+	padding: 0;
+}
+
+.no-border {
+	border: none;
+	background-color: transparent;
+	padding: 0;
 }
 </style>
+  
