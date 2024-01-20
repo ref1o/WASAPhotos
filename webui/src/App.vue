@@ -66,6 +66,12 @@ export default {
 </script>
 
 <style>
+@font-face{
+  font-family: "Courgette";
+  src: local("Courgette"),
+    url(./assets/fonts/Courgette/Courgette-Regular.ttf) format("truetype");
+}
+
 .app-container {
   background-color: #f8f8f8; /* Colore di sfondo pulito */
   min-height: 100vh;

@@ -32,12 +32,11 @@ export default {
 </script>
 
 <template>
-  <link href='https://fonts.googleapis.com/css?family=Courgette' rel='stylesheet'>
   <div class="container-fluid home-view">
     <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
 
-    <div class="row justify-content-center"> <!-- Centro le card delle foto -->
-      <div class="photo-card-container"> <!-- Classe personalizzata per la card delle foto -->
+    <div class="row justify-content-center">
+      <div class="photo-card-container">
         <Photo
           v-for="(photo,index) in photos"
           :key="index"
