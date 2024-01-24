@@ -291,6 +291,7 @@ export default {
 }
 
 .no-posts h2 {
-    color: #fff;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #171717;
 }
 </style>
