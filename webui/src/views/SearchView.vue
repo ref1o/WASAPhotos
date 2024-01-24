@@ -57,23 +57,51 @@ export default {
 </script>
 
 <template>
-	<div class="container-fluid h-100 ">
-		<UserMiniCard v-for="(user,index) in users" 
-		:key="index"
-		:identifier="user.user_id" 
-		:nickname="user.nickname" 
-		@clickedUser="goToProfile"/>
+    <div class="container-fluid">
+        <div v-for="(user, index) in users" :key="index" class="user-card" @click="goToProfile(user.user_id)">
+            <UserMiniCard :identifier="user.user_id" :nickname="user.nickname" />
+        </div>
 
-		<p v-if="users.length == 0" class="no-result-text d-flex justify-content-center"> No users found.</p>
+        <p v-if="users.length === 0" class="no-result-text d-flex justify-content-center"> Nessun utente trovato.</p>
 
-		<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
-	</div>
+        <div v-if="errormsg" class="error-msg">
+            <ErrorMsg :msg="errormsg" />
+        </div>
+    </div>
 </template>
 
-<style>
 
-.no-result-text{
-	color: white;
-	font-style: italic;
+<style>
+.container-fluid {
+    background-color: #f8f9fa; /* Sfondo chiaro */
+    padding: 2rem; /* Più spazio intorno agli elementi */
+}
+
+.user-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    margin: 1rem auto; /* Centra la card e aggiunge margine sopra e sotto */
+    max-width: 600px; /* Limita la larghezza massima della card */
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.user-card:hover {
+    transform: scale(1.05);
+}
+
+.no-result-text {
+    color: #6c757d; /* Colore del testo */
+    font-style: italic;
+    font-size: 1.2rem; /* Dimensione del testo */
+    margin-top: 2rem; /* Spazio superiore */
+}
+
+.error-msg {
+    color: var(--color-red-danger); /* Colore per i messaggi di errore */
+    text-align: center; /* Allineamento del testo */
+    margin-top: 2rem; /* Spazio superiore */
 }
 </style>

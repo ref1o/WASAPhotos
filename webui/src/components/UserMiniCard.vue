@@ -12,33 +12,35 @@ export default {
 </script>
 
 <template>
-    
-    <div class="row mb-2 mt-2">
-        <div class="col d-flex justify-content-center">
-            <div class="user-mini-card card bg-transparent border-start">
-                <div class="card-body">
-                    <h5 @click="clickedUser" class="user-mini-card-title d-flex justify-content-center ">{{nickname }} @{{identifier }}</h5>
-                </div>
-            </div>
+    <div class="user-mini-card card" @click="clickedUser">
+        <div class="card-body">
+            <h5 class="user-mini-card-title">{{ nickname }} @{{ identifier }}</h5>
         </div>
     </div>
-    
 </template>
 
+
 <style>
-.user{
-    color: var(--color-text);
-}
-
-.user-mini-card{
-    color: black;
-    width: 25%;
+.user-mini-card {
+    color: #343a40; /* Colore del testo */
+    width: 100%; /* Usa tutta la larghezza disponibile */
     border: none;
-    border-color: black;
+    background-color: transparent; /* Sfondo trasparente */
+    transition: background-color 0.2s; /* Transizione per hover */
 }
 
-.user-mini-card-title:hover{
+.user-mini-card:hover {
+    background-color: #f8f9fa; /* Cambia colore di sfondo all'hover */
+}
+
+.user-mini-card-title {
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 500; /* Peso del font */
+    font-size: 1.2rem; /* Dimensione del testo */
+    text-align: center; /* Allinea il testo al centro */
+}
+
+.card-body {
+    padding: 1rem; /* Spazio interno */
 }
 </style>
