@@ -56,6 +56,7 @@ export default {
 
                         this.photos.unshift(response.data);
                         this.postCnt += 1;
+                        window.location.reload();
                     } else {
                         console.error('Token di autenticazione mancante.');
                     }

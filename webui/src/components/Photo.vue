@@ -127,6 +127,9 @@ export default {
 	
 			<div class="photo-card-details" style="text-align: left; margin: 0; padding: 0">
 				<p>Uploaded on {{ formattedUploadDate }}</p>
+            	<div v-if="isOwner" class="delete-icon-container">
+                	<i class="fa fa-trash delete-icon" @click="deletePhoto"></i>
+            	</div>
 			</div>
 		</div>
 	</div>
@@ -201,10 +204,9 @@ export default {
 }
 
 .photo-card-details {
-	width: 100%;
-	text-align: left;
-	margin-top: 0;
-	margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .photo-card-details p {
@@ -218,6 +220,17 @@ export default {
 	border: none;
 	background-color: transparent;
 	padding: 0;
+}
+
+.delete-icon-container {
+    display: flex;
+    align-items: center;
+}
+
+.delete-icon {
+    cursor: pointer;
+    color: #ff0000;
+    font-size: 20px;
 }
 </style>
   
