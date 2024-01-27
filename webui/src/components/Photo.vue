@@ -29,6 +29,7 @@ export default {
 				// Delete photo: /users/:id/photos/:photo_id
 				await this.$axios.delete("/users/" + this.owner + "/photos/" + this.photo_id);
 				this.$emit("removePhoto", this.photo_id);
+				window.location.reload();
 			} catch (e) {
 				//
 			}
@@ -229,8 +230,13 @@ export default {
 
 .delete-icon {
     cursor: pointer;
-    color: #ff0000;
+    color: #000000;
     font-size: 20px;
+}
+
+.delete-icon:hover{
+	color: red;
+
 }
 </style>
   

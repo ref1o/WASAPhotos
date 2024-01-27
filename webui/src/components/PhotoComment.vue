@@ -83,6 +83,7 @@ export default {
 }
 
 .comment-content {
+    text-align: left;
     margin-top: 5px;
     line-height: 1.4;
 }

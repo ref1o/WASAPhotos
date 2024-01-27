@@ -56,7 +56,6 @@ export default {
 
                         this.photos.unshift(response.data);
                         this.postCnt += 1;
-                        window.location.reload();
                     } else {
                         console.error('Token di autenticazione mancante.');
                     }
@@ -64,6 +63,7 @@ export default {
             } catch (error) {
                 console.error('Errore durante il caricamento della foto:', error);
             }
+            window.location.reload();
         },
 
         async loadInfo() {
