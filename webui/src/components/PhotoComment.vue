@@ -23,7 +23,6 @@ export default {
 
     mounted() {
         this.user = localStorage.getItem('token');
-        // Debugging: stampa delle props per verificare i valori passati
         console.log('PhotoComment Mounted:', {
             content: this.content,
             author: this.author,
@@ -63,7 +62,7 @@ export default {
 .comment-author {
     margin: 0;
     font-weight: bold;
-    color: #007bff; /* O scegli un colore che si adatti al tuo tema */
+    color: #007bff; 
 }
 
 .author-id {
